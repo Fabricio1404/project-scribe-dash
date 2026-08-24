@@ -10,33 +10,154 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ConveniosRouteImport } from './routes/convenios'
+import { Route as InvestigadoresRouteImport } from './routes/investigadores'
+import { Route as LineasRouteImport } from './routes/lineas'
+import { Route as PresupuestoRouteImport } from './routes/presupuesto'
+import { Route as PublicacionesRouteImport } from './routes/publicaciones'
+import { Route as ReportesRouteImport } from './routes/reportes'
+import { Route as TransferenciasRouteImport } from './routes/transferencias'
+import { Route as ProyectosIndexRouteImport } from './routes/proyectos.index'
+import { Route as ProyectosProyectoIdRouteImport } from './routes/proyectos.$proyectoId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConveniosRoute = ConveniosRouteImport.update({
+  id: '/convenios',
+  path: '/convenios',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvestigadoresRoute = InvestigadoresRouteImport.update({
+  id: '/investigadores',
+  path: '/investigadores',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LineasRoute = LineasRouteImport.update({
+  id: '/lineas',
+  path: '/lineas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PresupuestoRoute = PresupuestoRouteImport.update({
+  id: '/presupuesto',
+  path: '/presupuesto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicacionesRoute = PublicacionesRouteImport.update({
+  id: '/publicaciones',
+  path: '/publicaciones',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportesRoute = ReportesRouteImport.update({
+  id: '/reportes',
+  path: '/reportes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransferenciasRoute = TransferenciasRouteImport.update({
+  id: '/transferencias',
+  path: '/transferencias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProyectosIndexRoute = ProyectosIndexRouteImport.update({
+  id: '/proyectos/',
+  path: '/proyectos/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProyectosProyectoIdRoute = ProyectosProyectoIdRouteImport.update({
+  id: '/proyectos/$proyectoId',
+  path: '/proyectos/$proyectoId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/convenios': typeof ConveniosRoute
+  '/investigadores': typeof InvestigadoresRoute
+  '/lineas': typeof LineasRoute
+  '/presupuesto': typeof PresupuestoRoute
+  '/publicaciones': typeof PublicacionesRoute
+  '/reportes': typeof ReportesRoute
+  '/transferencias': typeof TransferenciasRoute
+  '/proyectos/$proyectoId': typeof ProyectosProyectoIdRoute
+  '/proyectos/': typeof ProyectosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/convenios': typeof ConveniosRoute
+  '/investigadores': typeof InvestigadoresRoute
+  '/lineas': typeof LineasRoute
+  '/presupuesto': typeof PresupuestoRoute
+  '/publicaciones': typeof PublicacionesRoute
+  '/reportes': typeof ReportesRoute
+  '/transferencias': typeof TransferenciasRoute
+  '/proyectos/$proyectoId': typeof ProyectosProyectoIdRoute
+  '/proyectos': typeof ProyectosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/convenios': typeof ConveniosRoute
+  '/investigadores': typeof InvestigadoresRoute
+  '/lineas': typeof LineasRoute
+  '/presupuesto': typeof PresupuestoRoute
+  '/publicaciones': typeof PublicacionesRoute
+  '/reportes': typeof ReportesRoute
+  '/transferencias': typeof TransferenciasRoute
+  '/proyectos/$proyectoId': typeof ProyectosProyectoIdRoute
+  '/proyectos/': typeof ProyectosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/convenios'
+    | '/investigadores'
+    | '/lineas'
+    | '/presupuesto'
+    | '/publicaciones'
+    | '/reportes'
+    | '/transferencias'
+    | '/proyectos/$proyectoId'
+    | '/proyectos/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/convenios'
+    | '/investigadores'
+    | '/lineas'
+    | '/presupuesto'
+    | '/publicaciones'
+    | '/reportes'
+    | '/transferencias'
+    | '/proyectos/$proyectoId'
+    | '/proyectos'
+  id:
+    | '__root__'
+    | '/'
+    | '/convenios'
+    | '/investigadores'
+    | '/lineas'
+    | '/presupuesto'
+    | '/publicaciones'
+    | '/reportes'
+    | '/transferencias'
+    | '/proyectos/$proyectoId'
+    | '/proyectos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ConveniosRoute: typeof ConveniosRoute
+  InvestigadoresRoute: typeof InvestigadoresRoute
+  LineasRoute: typeof LineasRoute
+  PresupuestoRoute: typeof PresupuestoRoute
+  PublicacionesRoute: typeof PublicacionesRoute
+  ReportesRoute: typeof ReportesRoute
+  TransferenciasRoute: typeof TransferenciasRoute
+  ProyectosProyectoIdRoute: typeof ProyectosProyectoIdRoute
+  ProyectosIndexRoute: typeof ProyectosIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +169,83 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/convenios': {
+      id: '/convenios'
+      path: '/convenios'
+      fullPath: '/convenios'
+      preLoaderRoute: typeof ConveniosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/investigadores': {
+      id: '/investigadores'
+      path: '/investigadores'
+      fullPath: '/investigadores'
+      preLoaderRoute: typeof InvestigadoresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lineas': {
+      id: '/lineas'
+      path: '/lineas'
+      fullPath: '/lineas'
+      preLoaderRoute: typeof LineasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/presupuesto': {
+      id: '/presupuesto'
+      path: '/presupuesto'
+      fullPath: '/presupuesto'
+      preLoaderRoute: typeof PresupuestoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/publicaciones': {
+      id: '/publicaciones'
+      path: '/publicaciones'
+      fullPath: '/publicaciones'
+      preLoaderRoute: typeof PublicacionesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reportes': {
+      id: '/reportes'
+      path: '/reportes'
+      fullPath: '/reportes'
+      preLoaderRoute: typeof ReportesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transferencias': {
+      id: '/transferencias'
+      path: '/transferencias'
+      fullPath: '/transferencias'
+      preLoaderRoute: typeof TransferenciasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/proyectos/': {
+      id: '/proyectos/'
+      path: '/proyectos'
+      fullPath: '/proyectos/'
+      preLoaderRoute: typeof ProyectosIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/proyectos/$proyectoId': {
+      id: '/proyectos/$proyectoId'
+      path: '/proyectos/$proyectoId'
+      fullPath: '/proyectos/$proyectoId'
+      preLoaderRoute: typeof ProyectosProyectoIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ConveniosRoute: ConveniosRoute,
+  InvestigadoresRoute: InvestigadoresRoute,
+  LineasRoute: LineasRoute,
+  PresupuestoRoute: PresupuestoRoute,
+  PublicacionesRoute: PublicacionesRoute,
+  ReportesRoute: ReportesRoute,
+  TransferenciasRoute: TransferenciasRoute,
+  ProyectosProyectoIdRoute: ProyectosProyectoIdRoute,
+  ProyectosIndexRoute: ProyectosIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
