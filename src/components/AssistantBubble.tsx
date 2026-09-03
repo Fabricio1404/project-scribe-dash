@@ -1,14 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Bot, Send, X } from "lucide-react";
-import {
-  alertas,
-  formatMoney,
-  lineas,
-  proyectos,
-  publicaciones,
-  totalPresupuesto,
-  transferencias,
-} from "@/data/mock";
+import { Bot, Loader2, Send, X } from "lucide-react";
+import { preguntarAsistente } from "@/lib/asistente.functions";
 
 interface Mensaje {
   de: "bot" | "usuario";
@@ -22,67 +14,40 @@ const sugerencias = [
   "¿Qué transferencias están listas?",
 ];
 
-function responder(q: string): string {
-  const t = q.toLowerCase();
-
-  if (t.includes("alerta")) {
-    return `Hay ${alertas.length} alertas activas: ${alertas.map((a) => `${a.tipo} — ${a.texto}`).join(" · ")}`;
-  }
-  if (t.includes("ejecución") || t.includes("ejecucion") || t.includes("proyecto")) {
-    const lista = proyectos
-      .filter((p) => p.estado === "En ejecución")
-      .map((p) => `${p.codigo} "${p.titulo}" (${p.avance}% de avance)`)
-      .join("; ");
-    return `Los proyectos en ejecución son: ${lista}. Podés ver el detalle en la sección Proyectos.`;
-  }
-  if (t.includes("presupuesto") || t.includes("ejecut")) {
-    const t2 = proyectos.reduce(
-      (acc, p) => {
-        const x = totalPresupuesto(p);
-        return { asignado: acc.asignado + x.asignado, ejecutado: acc.ejecutado + x.ejecutado };
-      },
-      { asignado: 0, ejecutado: 0 },
-    );
-    const pct = Math.round((t2.ejecutado / t2.asignado) * 100);
-    return `Se ejecutaron ${formatMoney(t2.ejecutado)} de ${formatMoney(t2.asignado)} asignados (${pct}%). El detalle por rubro está en la sección Presupuesto.`;
-  }
-  if (t.includes("transferencia")) {
-    const listas = transferencias.filter((x) => x.estado === "Lista para transferir");
-    return listas.length
-      ? `Están listas para transferir: ${listas.map((x) => x.nombre).join("; ")}.`
-      : "Por ahora no hay transferencias marcadas como listas; el detalle está en Transferencia tecnológica.";
-  }
-  if (t.includes("línea") || t.includes("linea")) {
-    return `Hay ${lineas.length} líneas registradas: ${lineas
-      .map((l) => `${l.nombre} (${l.estado.toLowerCase()})`)
-      .join(", ")}. La línea en riesgo necesita designar un director.`;
-  }
-  if (t.includes("publicacion") || t.includes("publicación")) {
-    return `Hay ${publicaciones.length} producciones registradas, ${publicaciones.filter((p) => p.visibilidad === "Pública").length} de ellas públicas.`;
-  }
-  if (t.includes("hola") || t.includes("buenas")) {
-    return "¡Hola! Puedo ayudarte con dudas sobre proyectos, presupuesto, alertas, líneas, publicaciones y transferencias del CIT. ¿Qué necesitás saber?";
-  }
-  return "Puedo ayudarte con proyectos, presupuesto, alertas, líneas de investigación, publicaciones y transferencias. Probá con alguna de las sugerencias de arriba.";
-}
-
 export function AssistantBubble() {
   const [abierto, setAbierto] = useState(false);
   const [mensajes, setMensajes] = useState<Mensaje[]>([
-    { de: "bot", texto: "¡Hola! Soy el asistente de CIT Nexus. ¿En qué puedo ayudarte?" },
+    {
+      de: "bot",
+      texto: "¡Hola! Soy el asistente de CIT Nexus, ahora con IA. Puedo responder dudas sobre proyectos, presupuesto, publicaciones, transferencias y convenios. ¿En qué te ayudo?",
+    },
   ]);
   const [entrada, setEntrada] = useState("");
+  const [pensando, setPensando] = useState(false);
   const listaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     listaRef.current?.scrollTo({ top: listaRef.current.scrollHeight, behavior: "smooth" });
-  }, [mensajes, abierto]);
+  }, [mensajes, pensando, abierto]);
 
-  const enviar = (texto: string) => {
+  const enviar = async (texto: string) => {
     const limpio = texto.trim();
-    if (!limpio) return;
-    setMensajes((m) => [...m, { de: "usuario", texto: limpio }, { de: "bot", texto: responder(limpio) }]);
+    if (!limpio || pensando) return;
+    const historial = mensajes.slice(-10);
+    setMensajes((m) => [...m, { de: "usuario", texto: limpio }]);
     setEntrada("");
+    setPensando(true);
+    try {
+      const { respuesta } = await preguntarAsistente({ data: { pregunta: limpio, historial } });
+      setMensajes((m) => [...m, { de: "bot", texto: respuesta }]);
+    } catch {
+      setMensajes((m) => [
+        ...m,
+        { de: "bot", texto: "No pude procesar tu consulta en este momento. Intentá de nuevo en unos segundos." },
+      ]);
+    } finally {
+      setPensando(false);
+    }
   };
 
   return (
@@ -95,7 +60,7 @@ export function AssistantBubble() {
             </span>
             <div className="flex-1">
               <p className="text-sm font-semibold leading-tight">Asistente CIT Nexus</p>
-              <p className="text-xs text-sidebar-foreground/60">Responde con datos del sistema</p>
+              <p className="text-xs text-sidebar-foreground/60">IA conectada a los datos del sistema</p>
             </div>
             <button
               type="button"
@@ -121,6 +86,13 @@ export function AssistantBubble() {
                 </p>
               </div>
             ))}
+            {pensando ? (
+              <div className="flex justify-start">
+                <p className="flex items-center gap-2 rounded-2xl rounded-bl-sm bg-muted px-3.5 py-2 text-sm text-muted-foreground">
+                  <Loader2 className="size-3.5 animate-spin" /> Pensando…
+                </p>
+              </div>
+            ) : null}
           </div>
 
           <div className="flex flex-wrap gap-1.5 border-t border-border px-3 pt-2">
@@ -128,8 +100,9 @@ export function AssistantBubble() {
               <button
                 key={s}
                 type="button"
+                disabled={pensando}
                 onClick={() => enviar(s)}
-                className="rounded-full border border-border px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                className="rounded-full border border-border px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary disabled:opacity-50"
               >
                 {s}
               </button>
@@ -152,9 +125,10 @@ export function AssistantBubble() {
             <button
               type="submit"
               aria-label="Enviar"
-              className="grid size-9 place-items-center rounded-md bg-primary text-primary-foreground transition-colors hover:bg-primary/90"
+              disabled={pensando}
+              className="grid size-9 place-items-center rounded-md bg-primary text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
             >
-              <Send className="size-4" />
+              {pensando ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
             </button>
           </form>
         </div>
