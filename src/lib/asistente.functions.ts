@@ -26,7 +26,7 @@ Respondé en español rioplatense, tono formal pero cercano, respuestas breves (
 
 DATOS DEL SISTEMA:
 
-Líneas de investigación: ${JSON.stringify(lineas.map((l) => ({ id: l.id, nombre: l.nombre, estado: l.estado, director: l.directorActualId })))}
+Líneas de investigación: ${JSON.stringify(lineas.map((l) => ({ id: l.id, nombre: l.nombre, estado: l.estado, director: l.directorActual })))}
 
 Investigadores y becarios: ${JSON.stringify(investigadores)}
 
