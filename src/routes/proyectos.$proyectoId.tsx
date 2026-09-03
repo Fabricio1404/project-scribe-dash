@@ -73,7 +73,7 @@ function ProyectoDetalle() {
       />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Código" value={p.codigo} detail={getLinea(p.lineaId)?.nombre} />
+        <StatCard label="Código" value={p.codigo} detail={getLinea(p.lineaId)?.nombre ?? "Sin línea"} />
         <StatCard label="Avance general" value={`${p.avance}%`} detail={`${formatDate(p.inicio)} → ${formatDate(p.fin)}`} />
         <StatCard label="Ejecución presupuestaria" value={`${pct}%`} detail={`${formatMoney(totales.ejecutado)} de ${formatMoney(totales.asignado)}`} />
         <StatCard label="Financiador" value={p.financiador} detail={`Dirección: ${getInvestigador(p.directorId)?.nombre ?? "sin asignar"}`} />
