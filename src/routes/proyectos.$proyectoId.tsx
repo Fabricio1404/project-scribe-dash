@@ -76,7 +76,7 @@ function ProyectoDetalle() {
         <StatCard label="Código" value={p.codigo} detail={getLinea(p.lineaId)?.nombre} />
         <StatCard label="Avance general" value={`${p.avance}%`} detail={`${formatDate(p.inicio)} → ${formatDate(p.fin)}`} />
         <StatCard label="Ejecución presupuestaria" value={`${pct}%`} detail={`${formatMoney(totales.ejecutado)} de ${formatMoney(totales.asignado)}`} />
-        <StatCard label="Financiador" value={p.financiador} detail={`Dirección: ${getInvestigador(p.directorId)?.nombre ?? "—"}`} />
+        <StatCard label="Financiador" value={p.financiador} detail={`Dirección: ${getInvestigador(p.directorId)?.nombre ?? "sin asignar"}`} />
       </div>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-[1.5fr_1fr]">
