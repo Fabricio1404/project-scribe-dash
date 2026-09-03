@@ -13,6 +13,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import type { ReactNode } from "react";
+import { AssistantBubble } from "./AssistantBubble";
 
 const nav: { to: string; label: string; icon: LucideIcon }[] = [
   { to: "/", label: "Panel general", icon: LayoutDashboard },
@@ -100,6 +101,8 @@ export function AppShell({ children }: { children: ReactNode }) {
 
         <main className="flex-1 px-5 py-6 lg:px-8 lg:py-8">{children}</main>
       </div>
+
+      <AssistantBubble />
     </div>
   );
 }
